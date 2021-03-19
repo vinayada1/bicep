@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 using System;
-using System.IO;
 using System.Runtime;
 using System.Threading;
 using System.Threading.Tasks;
 using Bicep.Core.FileSystem;
 using Bicep.Core.TypeSystem.Az;
 using Bicep.Core.Utils;
+using Bicep.Core.TypeSystem.Radius;
 
 namespace Bicep.LanguageServer
 {
@@ -27,8 +27,8 @@ namespace Bicep.LanguageServer
                     Console.OpenStandardOutput(),
                     new Server.CreationOptions
                     {
-                        ResourceTypeProvider = AzResourceTypeProvider.CreateWithAzTypes(),
-                        FileResolver = new FileResolver()
+                        ResourceTypeProvider = RadiusTypeProvider.MakeComposite(AzResourceTypeProvider.CreateWithAzTypes()),
+                        FileResolver = new FileResolver(),
                     });
 
                 await server.RunAsync(cancellationToken);

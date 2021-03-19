@@ -12,6 +12,7 @@ using Bicep.Core.FileSystem;
 using Bicep.Core.Registry;
 using Bicep.Core.TypeSystem;
 using Bicep.Core.TypeSystem.Az;
+using Bicep.Core.TypeSystem.Radius;
 using Bicep.Core.Workspaces;
 using Bicep.LanguageServer.CompilationManager;
 using Bicep.LanguageServer.Completions;
@@ -51,7 +52,7 @@ namespace Bicep.LanguageServer
             : this(creationOptions, options => options.WithInput(input).WithOutput(output))
         {
         }
-        
+
         private Server(CreationOptions creationOptions, Action<LanguageServerOptions> onOptionsFunc)
         {
             BicepDeploymentsInterop.Initialize();
@@ -102,7 +103,7 @@ namespace Bicep.LanguageServer
             var fileResolver = creationOptions.FileResolver ?? new FileResolver();
             // using type based registration so dependencies can be injected automatically
             // without manually constructing up the graph
-            services.AddSingleton<IResourceTypeProvider>(services => creationOptions.ResourceTypeProvider ?? AzResourceTypeProvider.CreateWithAzTypes());
+            services.AddSingleton<IResourceTypeProvider>(services => creationOptions.ResourceTypeProvider ?? RadiusTypeProvider.MakeComposite(AzResourceTypeProvider.CreateWithAzTypes()));
             services.AddSingleton<ISnippetsProvider>(services => creationOptions.SnippetsProvider ?? new SnippetsProvider(fileResolver));
             services.AddSingleton<IFileResolver>(services => fileResolver);
             services.AddSingleton<IModuleRegistryProvider, DefaultModuleRegistryProvider>();

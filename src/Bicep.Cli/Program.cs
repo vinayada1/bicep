@@ -11,6 +11,7 @@ using Bicep.Core.Emit;
 using Bicep.Core.FileSystem;
 using Bicep.Core.Registry;
 using Bicep.Core.TypeSystem.Az;
+using Bicep.Core.TypeSystem.Radius;
 using Bicep.Core.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,7 +39,7 @@ namespace Bicep.Cli
 
             BicepDeploymentsInterop.Initialize();
 
-            var program = new Program(new InvocationContext(AzResourceTypeProvider.CreateWithAzTypes(), Console.Out, Console.Error, ThisAssembly.AssemblyFileVersion));
+            var program = new Program(new InvocationContext(RadiusTypeProvider.MakeComposite(AzResourceTypeProvider.CreateWithAzTypes()), Console.Out, Console.Error, ThisAssembly.AssemblyFileVersion));
 
             return program.Run(args);
         }
