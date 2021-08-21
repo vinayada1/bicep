@@ -1,0 +1,1 @@
+{"Types":{"apps/Deployment@v1":{"RelativePath":"kubernetes/kubernetes.apps/v1/types.json","Index":183},"ConfigMap@v1":{"RelativePath":"kubernetes/kubernetes.core/v1/types.json","Index":16},"radius.dev/Deployment@v1alpha1":{"RelativePath":"kubernetes/kubernetes.radius.dev/v1alpha1/types.json","Index":18}}}
