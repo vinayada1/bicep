@@ -8,6 +8,7 @@ using System.Text;
 using Bicep.Core.Emit;
 using Bicep.Core.Resources;
 using Bicep.Core.Semantics;
+using Bicep.Core.TypeSystem;
 using Bicep.Core.TypeSystem.Radius;
 using Bicep.Core.UnitTests;
 using Bicep.Core.UnitTests.Assertions;
@@ -54,7 +55,7 @@ resource app 'radius.dev/Applications@v1alpha1' = {
 }
 ";
 
-            var compilation = new Compilation(new RadiusTypeProvider(), SourceFileGroupingFactory.CreateFromText(text, BicepTestConstants.FileResolver));
+            var compilation = new Compilation(ResourceTypeProvider.CreateDefault(), SourceFileGroupingFactory.CreateFromText(text, BicepTestConstants.FileResolver));
             var model = compilation.GetEntrypointSemanticModel();
             model.GetAllDiagnostics().Should().BeEmpty();
 

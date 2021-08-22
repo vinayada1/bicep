@@ -39,7 +39,8 @@ namespace Bicep.Core.TypeSystem.Radius
                         parent,
                         input.Dependencies,
                         input.ScopeSyntax,
-                        input.IsExistingResource);
+                        input.IsExistingResource,
+                        input.Provider);
                 }
 
                 case RadiusResources.ComponentResourceType:
@@ -53,7 +54,8 @@ namespace Bicep.Core.TypeSystem.Radius
                         input.Parent,
                         input.Dependencies,
                         input.ScopeSyntax,
-                        input.IsExistingResource);
+                        input.IsExistingResource,
+                        input.Provider);
                 }
 
                 case RadiusResources.DeploymentResourceType:
@@ -67,7 +69,8 @@ namespace Bicep.Core.TypeSystem.Radius
                         input.Parent,
                         input.Dependencies,
                         input.ScopeSyntax,
-                        input.IsExistingResource);
+                        input.IsExistingResource,
+                        input.Provider);
                 }
             }
 

@@ -8,6 +8,7 @@ using Bicep.Core.FileSystem;
 using Bicep.Core.TypeSystem.Az;
 using Bicep.Core.Utils;
 using Bicep.Core.TypeSystem.Radius;
+using Bicep.Core.TypeSystem;
 
 namespace Bicep.LanguageServer
 {
@@ -27,7 +28,7 @@ namespace Bicep.LanguageServer
                     Console.OpenStandardOutput(),
                     new Server.CreationOptions
                     {
-                        ResourceTypeProvider = RadiusTypeProvider.MakeComposite(AzResourceTypeProvider.CreateWithAzTypes()),
+                        ResourceTypeProvider = ResourceTypeProvider.CreateDefault(),
                         FileResolver = new FileResolver(),
                     });
 

@@ -124,7 +124,8 @@ namespace Bicep.Core.Emit
                 parent: new ResourceMetadataParent(application, null, isNested: true),
                 dependencies: components.Concat(new []{ application, }).Select(d => new ResourceDependencyMetadata(d.Symbol, indexExpression: null)),
                 scopeSyntax: null,
-                isExistingResource: false);
+                isExistingResource: false,
+                provider: null);
         }
 
         private ObjectSyntax EvaluateDecorators(StatementSyntax statement, ObjectSyntax input, TypeSymbol targetType)

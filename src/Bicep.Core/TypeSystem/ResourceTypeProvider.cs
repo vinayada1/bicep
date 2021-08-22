@@ -11,6 +11,16 @@ namespace Bicep.Core.TypeSystem
 
     public abstract class ResourceTypeProvider : IResourceTypeProvider
     {
+        public static IResourceTypeProvider CreateDefault()
+        {
+            return new CompositeResourceTypeProvider(new []
+            {
+                new Radius.RadiusTypeProvider(),
+                new Kubernetes.KubernetesTypeProvider(),
+                Az.AzResourceTypeProvider.CreateWithAzTypes(),
+            });
+        }
+
         private class ResourceTypeCache
         {
             private class KeyComparer : IEqualityComparer<(ResourceTypeGenerationFlags flags, ResourceTypeReference type)>
@@ -60,7 +70,7 @@ namespace Bicep.Core.TypeSystem
                 return this.loader!.LoadType(typeReference);
             }
 
-            throw new InvalidOperationException($"type {typeReference} is not supported");
+            throw new InvalidOperationException($"type {typeReference.FullyQualifiedType} is not supported");
         }
 
         public ResourceType GetType(ResourceTypeReference typeReference, ResourceTypeGenerationFlags flags)
@@ -74,7 +84,7 @@ namespace Bicep.Core.TypeSystem
             return cache.GetOrAdd(flags, typeReference, () =>
             {
                 var resourceType = GenerateResourceType(typeReference);
-                return Az.AzResourceTypeProvider.SetBicepResourceProperties(resourceType, flags);
+                return Az.AzResourceTypeProvider.SetBicepResourceProperties(resourceType, flags, isARMResource: false);
             });
         }
 

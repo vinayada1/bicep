@@ -1,6 +1,24 @@
 # kubernetes.apps @ v1
 
-## Resource apps/Deployment@v1
+## Resource kubernetes.apps/ControllerRevision@v1
+* **Valid Scope(s)**: Unknown
+### Properties
+* **apiVersion**: 'apps/v1' (ReadOnly, DeployTimeConstant): The api version.
+* **data**: any: Any object
+* **kind**: 'ControllerRevision' (ReadOnly, DeployTimeConstant): The resource kind.
+* **metadata**: [metadata](#metadata) (Required): The resource metadata.
+* **revision**: int (Required): Revision indicates the revision of the state represented by Data.
+
+## Resource kubernetes.apps/DaemonSet@v1
+* **Valid Scope(s)**: Unknown
+### Properties
+* **apiVersion**: 'apps/v1' (ReadOnly, DeployTimeConstant): The api version.
+* **kind**: 'DaemonSet' (ReadOnly, DeployTimeConstant): The resource kind.
+* **metadata**: [metadata](#metadata) (Required): The resource metadata.
+* **spec**: [IoK8SApiAppsV1DaemonSetSpec](#iok8sapiappsv1daemonsetspec): DaemonSetSpec is the specification of a daemon set.
+* **status**: [IoK8SApiAppsV1DaemonSetStatus](#iok8sapiappsv1daemonsetstatus): DaemonSetStatus represents the current status of a daemon set.
+
+## Resource kubernetes.apps/Deployment@v1
 * **Valid Scope(s)**: Unknown
 ### Properties
 * **apiVersion**: 'apps/v1' (ReadOnly, DeployTimeConstant): The api version.
@@ -8,6 +26,24 @@
 * **metadata**: [metadata](#metadata) (Required): The resource metadata.
 * **spec**: [IoK8SApiAppsV1DeploymentSpec](#iok8sapiappsv1deploymentspec): DeploymentSpec is the specification of the desired behavior of the Deployment.
 * **status**: [IoK8SApiAppsV1DeploymentStatus](#iok8sapiappsv1deploymentstatus): DeploymentStatus is the most recently observed status of the Deployment.
+
+## Resource kubernetes.apps/ReplicaSet@v1
+* **Valid Scope(s)**: Unknown
+### Properties
+* **apiVersion**: 'apps/v1' (ReadOnly, DeployTimeConstant): The api version.
+* **kind**: 'ReplicaSet' (ReadOnly, DeployTimeConstant): The resource kind.
+* **metadata**: [metadata](#metadata) (Required): The resource metadata.
+* **spec**: [IoK8SApiAppsV1ReplicaSetSpec](#iok8sapiappsv1replicasetspec): ReplicaSetSpec is the specification of a ReplicaSet.
+* **status**: [IoK8SApiAppsV1ReplicaSetStatus](#iok8sapiappsv1replicasetstatus): ReplicaSetStatus represents the current status of a ReplicaSet.
+
+## Resource kubernetes.apps/StatefulSet@v1
+* **Valid Scope(s)**: Unknown
+### Properties
+* **apiVersion**: 'apps/v1' (ReadOnly, DeployTimeConstant): The api version.
+* **kind**: 'StatefulSet' (ReadOnly, DeployTimeConstant): The resource kind.
+* **metadata**: [metadata](#metadata) (Required): The resource metadata.
+* **spec**: [IoK8SApiAppsV1StatefulSetSpec](#iok8sapiappsv1statefulsetspec): A StatefulSetSpec is the specification of a StatefulSet.
+* **status**: [IoK8SApiAppsV1StatefulSetStatus](#iok8sapiappsv1statefulsetstatus): StatefulSetStatus represents the current state of a StatefulSet.
 
 ## metadata
 ### Properties
@@ -18,32 +54,38 @@
 
 ## annotations
 ### Properties
-* **annotations**: [annotations](#annotations): The annotations for the resource.
-* **labels**: [labels](#labels): The labels for the resource.
-* **name**: string (Required, DeployTimeConstant): The name of the resource.
-* **namespace**: string (DeployTimeConstant): The namespace of the resource.
 ### Additional Properties
 * **Additional Properties Type**: string
 
 ## labels
 ### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## metadata
+### Properties
 * **annotations**: [annotations](#annotations): The annotations for the resource.
 * **labels**: [labels](#labels): The labels for the resource.
 * **name**: string (Required, DeployTimeConstant): The name of the resource.
 * **namespace**: string (DeployTimeConstant): The namespace of the resource.
+
+## annotations
+### Properties
 ### Additional Properties
 * **Additional Properties Type**: string
 
-## IoK8SApiAppsV1DeploymentSpec
+## labels
 ### Properties
-* **minReadySeconds**: int: Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
-* **paused**: bool: Indicates that the deployment is paused.
-* **progressDeadlineSeconds**: int: The maximum time in seconds for a deployment to make progress before it is considered to be failed. The deployment controller will continue to process failed deployments and a condition with a ProgressDeadlineExceeded reason will be surfaced in the deployment status. Note that progress will not be estimated during the time a deployment is paused. Defaults to 600s.
-* **replicas**: int: Number of desired pods. This is a pointer to distinguish between explicit zero and not specified. Defaults to 1.
-* **revisionHistoryLimit**: int: The number of old ReplicaSets to retain to allow rollback. This is a pointer to distinguish between explicit zero and not specified. Defaults to 10.
+### Additional Properties
+* **Additional Properties Type**: string
+
+## IoK8SApiAppsV1DaemonSetSpec
+### Properties
+* **minReadySeconds**: int: The minimum number of seconds for which a newly created DaemonSet pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready).
+* **revisionHistoryLimit**: int: The number of old history to retain to allow rollback. This is a pointer to distinguish between explicit zero and not specified. Defaults to 10.
 * **selector**: [IoK8SApimachineryPkgApisMetaV1LabelSelector](#iok8sapimachinerypkgapismetav1labelselector) (Required): A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
-* **strategy**: [IoK8SApiAppsV1DeploymentStrategy](#iok8sapiappsv1deploymentstrategy): DeploymentStrategy describes how to replace existing pods with new ones.
 * **template**: [IoK8SApiCoreV1PodTemplateSpec](#iok8sapicorev1podtemplatespec) (Required): PodTemplateSpec describes the data a pod should have when created from a template
+* **updateStrategy**: [IoK8SApiAppsV1DaemonSetUpdateStrategy](#iok8sapiappsv1daemonsetupdatestrategy): DaemonSetUpdateStrategy is a struct used to control the update strategy for a DaemonSet.
 
 ## IoK8SApimachineryPkgApisMetaV1LabelSelector
 ### Properties
@@ -60,16 +102,6 @@
 ### Properties
 ### Additional Properties
 * **Additional Properties Type**: string
-
-## IoK8SApiAppsV1DeploymentStrategy
-### Properties
-* **rollingUpdate**: [IoK8SApiAppsV1RollingUpdateDeployment](#iok8sapiappsv1rollingupdatedeployment): Spec to control the desired behavior of rolling update.
-* **type**: string: Type of deployment. Can be "Recreate" or "RollingUpdate". Default is RollingUpdate.
-
-## IoK8SApiAppsV1RollingUpdateDeployment
-### Properties
-* **maxSurge**: string: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
-* **maxUnavailable**: string: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
 
 ## IoK8SApiCoreV1PodTemplateSpec
 ### Properties
@@ -915,6 +947,74 @@ The contents of the target Secret's Data field will be presented in a projected 
 * **storagePolicyName**: string: Storage Policy Based Management (SPBM) profile name.
 * **volumePath**: string (Required): Path that identifies vSphere volume vmdk
 
+## IoK8SApiAppsV1DaemonSetUpdateStrategy
+### Properties
+* **rollingUpdate**: [IoK8SApiAppsV1RollingUpdateDaemonSet](#iok8sapiappsv1rollingupdatedaemonset): Spec to control the desired behavior of daemon set rolling update.
+* **type**: string: Type of daemon set update. Can be "RollingUpdate" or "OnDelete". Default is RollingUpdate.
+
+## IoK8SApiAppsV1RollingUpdateDaemonSet
+### Properties
+* **maxUnavailable**: string: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
+
+## IoK8SApiAppsV1DaemonSetStatus
+### Properties
+* **collisionCount**: int: Count of hash collisions for the DaemonSet. The DaemonSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
+* **conditions**: [IoK8SApiAppsV1DaemonSetCondition](#iok8sapiappsv1daemonsetcondition)[]: Represents the latest available observations of a DaemonSet's current state.
+* **currentNumberScheduled**: int (Required): The number of nodes that are running at least 1 daemon pod and are supposed to run the daemon pod. More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+* **desiredNumberScheduled**: int (Required): The total number of nodes that should be running the daemon pod (including nodes correctly running the daemon pod). More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+* **numberAvailable**: int: The number of nodes that should be running the daemon pod and have one or more of the daemon pod running and available (ready for at least spec.minReadySeconds)
+* **numberMisscheduled**: int (Required): The number of nodes that are running the daemon pod, but are not supposed to run the daemon pod. More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+* **numberReady**: int (Required): The number of nodes that should be running the daemon pod and have one or more of the daemon pod running and ready.
+* **numberUnavailable**: int: The number of nodes that should be running the daemon pod and have none of the daemon pod running and available (ready for at least spec.minReadySeconds)
+* **observedGeneration**: int: The most recent generation observed by the daemon set controller.
+* **updatedNumberScheduled**: int: The total number of nodes that are running updated daemon pod
+
+## IoK8SApiAppsV1DaemonSetCondition
+### Properties
+* **lastTransitionTime**: string: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+* **message**: string: A human readable message indicating details about the transition.
+* **reason**: string: The reason for the condition's last transition.
+* **status**: string (Required): Status of the condition, one of True, False, Unknown.
+* **type**: string (Required): Type of DaemonSet condition.
+
+## metadata
+### Properties
+* **annotations**: [annotations](#annotations): The annotations for the resource.
+* **labels**: [labels](#labels): The labels for the resource.
+* **name**: string (Required, DeployTimeConstant): The name of the resource.
+* **namespace**: string (DeployTimeConstant): The namespace of the resource.
+
+## annotations
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## labels
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## IoK8SApiAppsV1DeploymentSpec
+### Properties
+* **minReadySeconds**: int: Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
+* **paused**: bool: Indicates that the deployment is paused.
+* **progressDeadlineSeconds**: int: The maximum time in seconds for a deployment to make progress before it is considered to be failed. The deployment controller will continue to process failed deployments and a condition with a ProgressDeadlineExceeded reason will be surfaced in the deployment status. Note that progress will not be estimated during the time a deployment is paused. Defaults to 600s.
+* **replicas**: int: Number of desired pods. This is a pointer to distinguish between explicit zero and not specified. Defaults to 1.
+* **revisionHistoryLimit**: int: The number of old ReplicaSets to retain to allow rollback. This is a pointer to distinguish between explicit zero and not specified. Defaults to 10.
+* **selector**: [IoK8SApimachineryPkgApisMetaV1LabelSelector](#iok8sapimachinerypkgapismetav1labelselector) (Required): A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+* **strategy**: [IoK8SApiAppsV1DeploymentStrategy](#iok8sapiappsv1deploymentstrategy): DeploymentStrategy describes how to replace existing pods with new ones.
+* **template**: [IoK8SApiCoreV1PodTemplateSpec](#iok8sapicorev1podtemplatespec) (Required): PodTemplateSpec describes the data a pod should have when created from a template
+
+## IoK8SApiAppsV1DeploymentStrategy
+### Properties
+* **rollingUpdate**: [IoK8SApiAppsV1RollingUpdateDeployment](#iok8sapiappsv1rollingupdatedeployment): Spec to control the desired behavior of rolling update.
+* **type**: string: Type of deployment. Can be "Recreate" or "RollingUpdate". Default is RollingUpdate.
+
+## IoK8SApiAppsV1RollingUpdateDeployment
+### Properties
+* **maxSurge**: string: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
+* **maxUnavailable**: string: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
+
 ## IoK8SApiAppsV1DeploymentStatus
 ### Properties
 * **availableReplicas**: int: Total number of available pods (ready for at least minReadySeconds) targeted by this deployment.
@@ -934,4 +1034,131 @@ The contents of the target Secret's Data field will be presented in a projected 
 * **reason**: string: The reason for the condition's last transition.
 * **status**: string (Required): Status of the condition, one of True, False, Unknown.
 * **type**: string (Required): Type of deployment condition.
+
+## metadata
+### Properties
+* **annotations**: [annotations](#annotations): The annotations for the resource.
+* **labels**: [labels](#labels): The labels for the resource.
+* **name**: string (Required, DeployTimeConstant): The name of the resource.
+* **namespace**: string (DeployTimeConstant): The namespace of the resource.
+
+## annotations
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## labels
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## IoK8SApiAppsV1ReplicaSetSpec
+### Properties
+* **minReadySeconds**: int: Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
+* **replicas**: int: Replicas is the number of desired replicas. This is a pointer to distinguish between explicit zero and unspecified. Defaults to 1. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller
+* **selector**: [IoK8SApimachineryPkgApisMetaV1LabelSelector](#iok8sapimachinerypkgapismetav1labelselector) (Required): A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+* **template**: [IoK8SApiCoreV1PodTemplateSpec](#iok8sapicorev1podtemplatespec): PodTemplateSpec describes the data a pod should have when created from a template
+
+## IoK8SApiAppsV1ReplicaSetStatus
+### Properties
+* **availableReplicas**: int: The number of available replicas (ready for at least minReadySeconds) for this replica set.
+* **conditions**: [IoK8SApiAppsV1ReplicaSetCondition](#iok8sapiappsv1replicasetcondition)[]: Represents the latest available observations of a replica set's current state.
+* **fullyLabeledReplicas**: int: The number of pods that have labels matching the labels of the pod template of the replicaset.
+* **observedGeneration**: int: ObservedGeneration reflects the generation of the most recently observed ReplicaSet.
+* **readyReplicas**: int: The number of ready replicas for this replica set.
+* **replicas**: int (Required): Replicas is the most recently oberved number of replicas. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller
+
+## IoK8SApiAppsV1ReplicaSetCondition
+### Properties
+* **lastTransitionTime**: string: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+* **message**: string: A human readable message indicating details about the transition.
+* **reason**: string: The reason for the condition's last transition.
+* **status**: string (Required): Status of the condition, one of True, False, Unknown.
+* **type**: string (Required): Type of replica set condition.
+
+## metadata
+### Properties
+* **annotations**: [annotations](#annotations): The annotations for the resource.
+* **labels**: [labels](#labels): The labels for the resource.
+* **name**: string (Required, DeployTimeConstant): The name of the resource.
+* **namespace**: string (DeployTimeConstant): The namespace of the resource.
+
+## annotations
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## labels
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## IoK8SApiAppsV1StatefulSetSpec
+### Properties
+* **podManagementPolicy**: string: podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.
+* **replicas**: int: replicas is the desired number of replicas of the given Template. These are replicas in the sense that they are instantiations of the same Template, but individual replicas also have a consistent identity. If unspecified, defaults to 1.
+* **revisionHistoryLimit**: int: revisionHistoryLimit is the maximum number of revisions that will be maintained in the StatefulSet's revision history. The revision history consists of all revisions not represented by a currently applied StatefulSetSpec version. The default value is 10.
+* **selector**: [IoK8SApimachineryPkgApisMetaV1LabelSelector](#iok8sapimachinerypkgapismetav1labelselector) (Required): A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+* **serviceName**: string (Required): serviceName is the name of the service that governs this StatefulSet. This service must exist before the StatefulSet, and is responsible for the network identity of the set. Pods get DNS/hostnames that follow the pattern: pod-specific-string.serviceName.default.svc.cluster.local where "pod-specific-string" is managed by the StatefulSet controller.
+* **template**: [IoK8SApiCoreV1PodTemplateSpec](#iok8sapicorev1podtemplatespec) (Required): PodTemplateSpec describes the data a pod should have when created from a template
+* **updateStrategy**: [IoK8SApiAppsV1StatefulSetUpdateStrategy](#iok8sapiappsv1statefulsetupdatestrategy): StatefulSetUpdateStrategy indicates the strategy that the StatefulSet controller will use to perform updates. It includes any additional parameters necessary to perform the update for the indicated strategy.
+* **volumeClaimTemplates**: [IoK8SApiCoreV1PersistentVolumeClaim](#iok8sapicorev1persistentvolumeclaim)[]: volumeClaimTemplates is a list of claims that pods are allowed to reference. The StatefulSet controller is responsible for mapping network identities to claims in a way that maintains the identity of a pod. Every claim in this list must have at least one matching (by name) volumeMount in one container in the template. A claim in this list takes precedence over any volumes in the template, with the same name.
+
+## IoK8SApiAppsV1StatefulSetUpdateStrategy
+### Properties
+* **rollingUpdate**: [IoK8SApiAppsV1RollingUpdateStatefulSetStrategy](#iok8sapiappsv1rollingupdatestatefulsetstrategy): RollingUpdateStatefulSetStrategy is used to communicate parameter for RollingUpdateStatefulSetStrategyType.
+* **type**: string: Type indicates the type of the StatefulSetUpdateStrategy. Default is RollingUpdate.
+
+## IoK8SApiAppsV1RollingUpdateStatefulSetStrategy
+### Properties
+* **partition**: int: Partition indicates the ordinal at which the StatefulSet should be partitioned. Default value is 0.
+
+## IoK8SApiCoreV1PersistentVolumeClaim
+### Properties
+* **apiVersion**: string: APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+* **kind**: string: Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+* **metadata**: [IoK8SApimachineryPkgApisMetaV1ObjectMeta](#iok8sapimachinerypkgapismetav1objectmeta): ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.
+* **spec**: [IoK8SApiCoreV1PersistentVolumeClaimSpec](#iok8sapicorev1persistentvolumeclaimspec): PersistentVolumeClaimSpec describes the common attributes of storage devices and allows a Source for provider-specific attributes
+* **status**: [IoK8SApiCoreV1PersistentVolumeClaimStatus](#iok8sapicorev1persistentvolumeclaimstatus): PersistentVolumeClaimStatus is the current status of a persistent volume claim.
+
+## IoK8SApiCoreV1PersistentVolumeClaimStatus
+### Properties
+* **accessModes**: string[]: AccessModes contains the actual access modes the volume backing the PVC has. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+* **capacity**: [IoK8SApiCoreV1PersistentVolumeClaimStatusCapacity](#iok8sapicorev1persistentvolumeclaimstatuscapacity): Represents the actual resources of the underlying volume.
+* **conditions**: [IoK8SApiCoreV1PersistentVolumeClaimCondition](#iok8sapicorev1persistentvolumeclaimcondition)[]: Current Condition of persistent volume claim. If underlying persistent volume is being resized then the Condition will be set to 'ResizeStarted'.
+* **phase**: string: Phase represents the current phase of PersistentVolumeClaim.
+
+## IoK8SApiCoreV1PersistentVolumeClaimStatusCapacity
+### Properties
+### Additional Properties
+* **Additional Properties Type**: string
+
+## IoK8SApiCoreV1PersistentVolumeClaimCondition
+### Properties
+* **lastProbeTime**: string: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+* **lastTransitionTime**: string: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+* **message**: string: Human-readable message indicating details about last transition.
+* **reason**: string: Unique, this should be a short, machine understandable string that gives the reason for condition's last transition. If it reports "ResizeStarted" that means the underlying persistent volume is being resized.
+* **status**: string (Required)
+* **type**: string (Required)
+
+## IoK8SApiAppsV1StatefulSetStatus
+### Properties
+* **collisionCount**: int: collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
+* **conditions**: [IoK8SApiAppsV1StatefulSetCondition](#iok8sapiappsv1statefulsetcondition)[]: Represents the latest available observations of a statefulset's current state.
+* **currentReplicas**: int: currentReplicas is the number of Pods created by the StatefulSet controller from the StatefulSet version indicated by currentRevision.
+* **currentRevision**: string: currentRevision, if not empty, indicates the version of the StatefulSet used to generate Pods in the sequence [0,currentReplicas).
+* **observedGeneration**: int: observedGeneration is the most recent generation observed for this StatefulSet. It corresponds to the StatefulSet's generation, which is updated on mutation by the API Server.
+* **readyReplicas**: int: readyReplicas is the number of Pods created by the StatefulSet controller that have a Ready Condition.
+* **replicas**: int (Required): replicas is the number of Pods created by the StatefulSet controller.
+* **updatedReplicas**: int: updatedReplicas is the number of Pods created by the StatefulSet controller from the StatefulSet version indicated by updateRevision.
+* **updateRevision**: string: updateRevision, if not empty, indicates the version of the StatefulSet used to generate Pods in the sequence [replicas-updatedReplicas,replicas)
+
+## IoK8SApiAppsV1StatefulSetCondition
+### Properties
+* **lastTransitionTime**: string: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+* **message**: string: A human readable message indicating details about the transition.
+* **reason**: string: The reason for the condition's last transition.
+* **status**: string (Required): Status of the condition, one of True, False, Unknown.
+* **type**: string (Required): Type of statefulset condition.
 
