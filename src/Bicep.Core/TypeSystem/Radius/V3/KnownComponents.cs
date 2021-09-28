@@ -81,6 +81,68 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 functions: null);
             var portsProperty = new TypeProperty("ports", portsType, TypePropertyFlags.None);
 
+            var headersType = new ObjectType(
+                name: "headers",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: Array.Empty<TypeProperty>(),
+                additionalPropertiesType: LanguageConstants.String,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var httpGet = new ObjectType(
+                name: "httpGet",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required),
+                    new TypeProperty("path", LanguageConstants.String, TypePropertyFlags.Required),
+                    new TypeProperty("headers", headersType, TypePropertyFlags.None),
+                    new TypeProperty("kind", new StringLiteralType("httpGet"), TypePropertyFlags.Required),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var tcp = new ObjectType(
+                name: "tcp",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required),
+                    new TypeProperty("kind", new StringLiteralType("tcp"), TypePropertyFlags.Required),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var exec = new ObjectType(
+                name: "exec",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("command", LanguageConstants.String, TypePropertyFlags.Required),
+                    new TypeProperty("kind", new StringLiteralType("exec"), TypePropertyFlags.Required),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var healthProbeType = new DiscriminatedObjectType(
+                name: "healthProbe",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                discriminatorKey: "kind",
+                unionMembers: new ITypeReference[]{httpGet, tcp, exec}
+                );
+            
+            var readinessProperty = new TypeProperty("readiness", healthProbeType, TypePropertyFlags.None, "Readiness check");
+            var livessProperty = new TypeProperty("liveness", healthProbeType, TypePropertyFlags.None, "Liveness check");
+
             var imageProperty = new TypeProperty("image", LanguageConstants.String, TypePropertyFlags.Required);
             var containerType = new ObjectType(
                 "container",
@@ -90,6 +152,8 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                     imageProperty,
                     envProperty,
                     portsProperty,
+                    readinessProperty,
+                    livessProperty
                 },
                 additionalPropertiesType: LanguageConstants.Any,
                 additionalPropertiesFlags: TypePropertyFlags.None);
