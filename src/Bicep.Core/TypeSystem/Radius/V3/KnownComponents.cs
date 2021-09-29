@@ -81,6 +81,7 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 functions: null);
             var portsProperty = new TypeProperty("ports", portsType, TypePropertyFlags.None);
 
+
             var ephemeralVolume = new ObjectType(
                 name: "ephemeral",
                 validationFlags: TypeSymbolValidationFlags.Default,
@@ -88,11 +89,6 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                     new TypeProperty("kind", new StringLiteralType("ephemeral"), TypePropertyFlags.Required, "Volume Kind"),
                     new TypeProperty("mountPath", LanguageConstants.String, TypePropertyFlags.Required, "The path where the volume is mounted"),
                     new TypeProperty("managedStore", UnionType.Create(new StringLiteralType("memory"), new StringLiteralType("disk")), TypePropertyFlags.Required, "Backing store for the ephemeral volume"),
-                },
-                additionalPropertiesType: null,
-                additionalPropertiesFlags: TypePropertyFlags.None,
-                functions: null);
-
             var persistentVolume = new ObjectType(
                 name: "persistent",
                 validationFlags: TypeSymbolValidationFlags.Default,
@@ -101,17 +97,12 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                     new TypeProperty("mountPath", LanguageConstants.String, TypePropertyFlags.Required, "The path where the volume is mounted"),
                     new TypeProperty("source", LanguageConstants.String, TypePropertyFlags.Required, "The source of the volume"),
                     new TypeProperty("rbac", UnionType.Create(new StringLiteralType("read"), new StringLiteralType("write")), TypePropertyFlags.None, "Container read/write access to the volume"),
-                },
-                additionalPropertiesType: null,
-                additionalPropertiesFlags: TypePropertyFlags.None,
-                functions: null);
-
-            var volumeItemType = new DiscriminatedObjectType(
+            
+           var volumeItemType = new DiscriminatedObjectType(
                 name: "volume",
                 validationFlags: TypeSymbolValidationFlags.Default,
                 discriminatorKey: "kind",
-                unionMembers: new ITypeReference[]{ephemeralVolume, persistentVolume}
-                );
+                unionMembers: new ITypeReference[]{ephemeralVolume, persistentVolume});
 
             var volumesType = new ObjectType(
                 name: "volumes",
@@ -121,6 +112,68 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 additionalPropertiesFlags: TypePropertyFlags.None,
                 functions: null);
             var volumesProperty = new TypeProperty("volumes", volumesType, TypePropertyFlags.None);
+                  
+            var headersType = new ObjectType(
+                name: "headers",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: Array.Empty<TypeProperty>(),
+                additionalPropertiesType: LanguageConstants.String,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var httpGet = new ObjectType(
+                name: "httpGet",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required, "The listening port number"),
+                    new TypeProperty("path", LanguageConstants.String, TypePropertyFlags.Required, "The route to make the HTTP request on"),
+                    new TypeProperty("headers", headersType, TypePropertyFlags.None, "Custom HTTP headers to add to the get request"),
+                    new TypeProperty("kind", new StringLiteralType("httpGet"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var tcp = new ObjectType(
+                name: "tcp",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required, "The listening port number"),
+                    new TypeProperty("kind", new StringLiteralType("tcp"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var exec = new ObjectType(
+                name: "exec",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                properties: new TypeProperty[] {
+                    new TypeProperty("command", LanguageConstants.String, TypePropertyFlags.Required, "Command to execute to probe readiness/liveness"),
+                    new TypeProperty("kind", new StringLiteralType("exec"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
+                },
+                additionalPropertiesType: null,
+                additionalPropertiesFlags: TypePropertyFlags.None,
+                functions: null);
+
+            var healthProbeType = new DiscriminatedObjectType(
+                name: "healthProbe",
+                validationFlags: TypeSymbolValidationFlags.Default,
+                discriminatorKey: "kind",
+                unionMembers: new ITypeReference[]{httpGet, tcp, exec}
+                );
+            
+            var readinessProperty = new TypeProperty("readinessProbe", healthProbeType, TypePropertyFlags.None, "Readiness health probe");
+            var livessProperty = new TypeProperty("livenessProbe", healthProbeType, TypePropertyFlags.None, "Liveness health probe");
 
             var imageProperty = new TypeProperty("image", LanguageConstants.String, TypePropertyFlags.Required);
             var containerType = new ObjectType(
@@ -132,6 +185,8 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                     envProperty,
                     portsProperty,
                     volumesProperty,
+                    readinessProperty,
+                    livessProperty
                 },
                 additionalPropertiesType: LanguageConstants.Any,
                 additionalPropertiesFlags: TypePropertyFlags.None);
