@@ -93,13 +93,13 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 name: "httpGet",
                 validationFlags: TypeSymbolValidationFlags.Default,
                 properties: new TypeProperty[] {
-                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required),
-                    new TypeProperty("path", LanguageConstants.String, TypePropertyFlags.Required),
-                    new TypeProperty("headers", headersType, TypePropertyFlags.None),
-                    new TypeProperty("kind", new StringLiteralType("httpGet"), TypePropertyFlags.Required),
-                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required, "The listening port number"),
+                    new TypeProperty("path", LanguageConstants.String, TypePropertyFlags.Required, "The route to make the HTTP request on"),
+                    new TypeProperty("headers", headersType, TypePropertyFlags.None, "Custom HTTP headers to add to the get request"),
+                    new TypeProperty("kind", new StringLiteralType("httpGet"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
                 },
                 additionalPropertiesType: null,
                 additionalPropertiesFlags: TypePropertyFlags.None,
@@ -109,11 +109,11 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 name: "tcp",
                 validationFlags: TypeSymbolValidationFlags.Default,
                 properties: new TypeProperty[] {
-                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required),
-                    new TypeProperty("kind", new StringLiteralType("tcp"), TypePropertyFlags.Required),
-                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("containerPort", LanguageConstants.Int, TypePropertyFlags.Required, "The listening port number"),
+                    new TypeProperty("kind", new StringLiteralType("tcp"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
                 },
                 additionalPropertiesType: null,
                 additionalPropertiesFlags: TypePropertyFlags.None,
@@ -123,11 +123,11 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 name: "exec",
                 validationFlags: TypeSymbolValidationFlags.Default,
                 properties: new TypeProperty[] {
-                    new TypeProperty("command", LanguageConstants.String, TypePropertyFlags.Required),
-                    new TypeProperty("kind", new StringLiteralType("exec"), TypePropertyFlags.Required),
-                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None),
-                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None),
+                    new TypeProperty("command", LanguageConstants.String, TypePropertyFlags.Required, "Command to execute to probe readiness/liveness"),
+                    new TypeProperty("kind", new StringLiteralType("exec"), TypePropertyFlags.Required, "Health probe kind"),
+                    new TypeProperty("initialDelaySeconds", LanguageConstants.Int, TypePropertyFlags.None, "Initial delay in seconds before probing for readiness/liveness"),
+                    new TypeProperty("failureThreshold", LanguageConstants.Int, TypePropertyFlags.None, "Threshold number of times the probe fails after which a failure would be reported"),
+                    new TypeProperty("periodSeconds", LanguageConstants.Int, TypePropertyFlags.None, "Interval for the readiness/liveness probe in seconds"),
                 },
                 additionalPropertiesType: null,
                 additionalPropertiesFlags: TypePropertyFlags.None,
@@ -140,8 +140,8 @@ namespace Bicep.Core.TypeSystem.Radius.V3
                 unionMembers: new ITypeReference[]{httpGet, tcp, exec}
                 );
             
-            var readinessProperty = new TypeProperty("readiness", healthProbeType, TypePropertyFlags.None, "Readiness check");
-            var livessProperty = new TypeProperty("liveness", healthProbeType, TypePropertyFlags.None, "Liveness check");
+            var readinessProperty = new TypeProperty("readinessProbe", healthProbeType, TypePropertyFlags.None, "Readiness health probe");
+            var livessProperty = new TypeProperty("livenessProbe", healthProbeType, TypePropertyFlags.None, "Liveness health probe");
 
             var imageProperty = new TypeProperty("image", LanguageConstants.String, TypePropertyFlags.Required);
             var containerType = new ObjectType(
